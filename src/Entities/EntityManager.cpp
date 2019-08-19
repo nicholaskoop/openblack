@@ -23,7 +23,7 @@ void EntityManager::DebugCreateEntities(float x, float y, float z)
 	auto game = Game::instance();
 	auto meshPack = game->GetMeshPack();
 
-	std::shared_ptr<SkinnedModel> skinnedModel(meshPack.models[0]);
+	std::shared_ptr<SkinnedModel> skinnedModel(meshPack.GetModel(362));
 
 	auto id       = _villagerComponents.size();
 	auto villager = Villager(id, VillageEthnicities::CELTIC, VillagerTypes::FARMER, VillagerTasks::IDLE, 18, 100, 0);

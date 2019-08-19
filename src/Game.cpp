@@ -137,10 +137,10 @@ void Game::Run()
 	_modelRotation = glm::vec3(180.0f, 111.0f, 0.0f);
 	_modelScale    = glm::vec3(0.5f);
 
-	OSFile file   = OSFile();
-	auto meshPath = GetGamePath() + "/Data/AllMeshes.g3d";
-	file.Open(meshPath.c_str(), LH_FILE_MODE::Read);
-	_meshPack = std::make_unique<MeshPack>(&file);
+	File file(GetGamePath() + "/Data/AllMeshes.g3d", FileMode::Read);
+	_meshPack = std::make_unique<MeshPack>();
+	_meshPack->LoadFromFile(file);
+	file.Close();
 
 	//_videoPlayer = std::make_unique<Video::VideoPlayer>(GetGamePath() + "/Data/logo.bik");
 
@@ -311,7 +311,6 @@ void Game::drawScene(const Camera& camera, bool drawWater)
 
 	modelMatrix = glm::scale(modelMatrix, _modelScale);
 
-
 	ShaderProgram* objectShader = _shaderManager->GetShader("SkinnedMesh");
 	objectShader->Bind();
 	objectShader->SetUniformValue("u_viewProjection", camera.GetViewProjectionMatrix());
@@ -321,7 +320,6 @@ void Game::drawScene(const Camera& camera, bool drawWater)
 	glDisable(GL_CULL_FACE);
 
 	_ecs->DrawModels(camera, *_shaderManager);
-
 }
 
 void Game::guiLoop()
@@ -362,9 +360,9 @@ void Game::guiLoop()
 	ImGui::Begin("Mesh Pack");
 
 	int i = 0;
-	for (auto tex : _meshPack->textures)
+	for (const auto& tex : _meshPack->GetTextures())
 	{
-		ImGui::Image((ImTextureID)tex, ImVec2(128, 128));
+		ImGui::Image((ImTextureID)tex->GetHandle(), ImVec2(128, 128));
 
 		if (++i % 8 != 0)
 			ImGui::SameLine();

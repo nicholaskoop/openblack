@@ -22,25 +22,39 @@
 #ifndef OPENBLACK_MESHPACK_H
 #define OPENBLACK_MESHPACK_H
 
-#include <3D/L3DModel.h>
-#include <Common/OSFile.h>
-#include <Graphics/Texture2DArray.h>
-#include "SkinnedModel.h"
+#include <memory>
+#include <vector>
 
 namespace OpenBlack
 {
+
+class File;
+class SkinnedModel;
+
+namespace Graphics
+{
+class Texture2D;
+}
+
 class MeshPack
 {
 public:
-	MeshPack(OSFile* allMeshes);
+	MeshPack() = default;
 
-	std::vector<std::shared_ptr<SkinnedModel>> models;
-	std::vector<GLuint> textures;
+	void LoadFromFile(File&);
 
-	uint32_t GetMeshCount();
+	using ModelsVec = std::vector<std::shared_ptr<SkinnedModel>>;
+	using TexturesVec = std::vector<std::shared_ptr<Graphics::Texture2D>>;
+
+	const ModelsVec& GetModels() const { return _models; }
+	const TexturesVec& GetTextures() const { return _textures; }
+
+	std::shared_ptr<SkinnedModel> GetModel(int id) { return _models.at(id); }
+	Graphics::Texture2D& GetTexture(int id) { return *_textures.at(id); }
 
 private:
-	uint32_t _meshCount;
+	ModelsVec _models;
+	TexturesVec _textures;
 };
 } // namespace OpenBlack
 
