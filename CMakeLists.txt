@@ -51,8 +51,6 @@ find_package(SDL2 REQUIRED)
 find_package(GLEW2 REQUIRED)
 find_package(glm REQUIRED)
 
-set(GLEW_LIBRARY "D:\\Lib\\glew-2.1.0\\lib\\Release\\x64\\glew32s.lib")
-
 # Include git hash in source
 include(cmake/GetGitRevisionDescription.cmake)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
