@@ -1,4 +1,4 @@
-#include <Entities/EntityId.h>
+#include <Entities/EntityID.h>
 #include <Entities/Components/Villager.h>
 #include <optional>
 
@@ -20,7 +20,7 @@ class EntityBuilder
 		std::optional<Villager> villager;
 	};
   private:
-	
+
 };
 } // namespace Entities
 } // namespace OpenBlack
