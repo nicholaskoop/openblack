@@ -30,7 +30,6 @@
 #include <3D/Water.h>
 #include <Common/CmdLineArgs.h>
 #include <Common/FileSystem.h>
-#include <Common/OSFile.h>
 #include <Entities/EntityManager.h>
 #include <Graphics/DebugDraw.h>
 #include <Graphics/IndexBuffer.h>
@@ -47,6 +46,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <Windows.h>
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
@@ -78,6 +78,8 @@ Game::Game(int argc, char** argv):
     _shaderManager(std::make_unique<ShaderManager>()),
     _ecs(std::make_unique<Entities::EntityManager>())
 {
+	sInstance = this;
+
 	int windowWidth = 1280, windowHeight = 1024;
 	DisplayMode displayMode = DisplayMode::Windowed;
 
@@ -115,7 +117,6 @@ Game::Game(int argc, char** argv):
 
 	// allocate vertex buffers for our debug draw
 	DebugDraw::Init();
-	sInstance = this;
 }
 
 Game::~Game()
