@@ -46,7 +46,10 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+
+#ifdef WIN32
 #include <Windows.h>
+#endif
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
