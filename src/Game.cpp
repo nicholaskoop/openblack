@@ -509,7 +509,7 @@ void Game::LoadLandscape(const std::string& name)
 	_landIsland->LoadFromFile(*file);
 }
 
-void Game::SetGamePath(const std::string &gamePath)
+void Game::SetGamePath(const std::string& gamePath)
 {
 	if (gamePath.empty())
 	{
