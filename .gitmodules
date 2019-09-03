@@ -4,3 +4,6 @@
 [submodule "external/entt"]
 	path = external/entt
 	url = https://github.com/skypjack/entt.git
+[submodule "external/bullet"]
+	path = external/bullet
+	url = https://github.com/bulletphysics/bullet3.git
