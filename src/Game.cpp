@@ -195,7 +195,7 @@ void Game::Run()
 				_running = false;
 			if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_f)
 				_window->SetFullscreen(true);
-			if (e.type == SDL_MOUSEMOTION)
+			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_RIGHT)
 			{
 				SDL_GetMouseState(&_mousePosition.x, &_mousePosition.y);
 				glm::ivec2 screenSize;
