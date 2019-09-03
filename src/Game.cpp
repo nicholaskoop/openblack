@@ -58,6 +58,8 @@
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 
+#include "AllMeshes.h"
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_opengl3.h>
 #include <imgui/imgui_impl_sdl.h>
@@ -456,6 +458,16 @@ void Game::guiLoop()
 	ImGui::Text("Country Count: %zu", _landIsland->GetCountries().size());
 
 	ImGui::Separator();
+
+	if (ImGui::Button("Spawn Boulder"))
+	{
+		auto entity   = _entityRegistry->Create();
+		auto rotation = 1.0f;
+		auto size     = 1.0f;
+		uint32_t mesh = MESH_LIST::MSH_BOULDER1_CHALK;
+		_entityRegistry->Assign<Transform>(entity, _intersection.x, _intersection.z, _intersection.y, size, 0.0f, rotation, 0.0f);
+		_entityRegistry->Assign<Model>(entity, mesh, 0.0f, 0.0f, 0.0f);
+	}
 
 	if (ImGui::Button("Dump Textures"))
 		_landIsland->DumpTextures();
