@@ -34,8 +34,8 @@ class FileSystem;
 class MeshPack;
 class MeshViewer;
 class LandIsland;
-class L3DModel;
-class L3DModel;
+class L3DMesh;
+class L3DMesh;
 class Sky;
 class Water;
 
@@ -104,7 +104,7 @@ class Game
 	std::unique_ptr<MeshPack> _meshPack;
 	//std::unique_ptr<Video::VideoPlayer> _videoPlayer;
 
-	std::unique_ptr<L3DModel> _testModel;
+	std::unique_ptr<L3DMesh> _testModel;
 	std::unique_ptr<Sky> _sky;
 	std::unique_ptr<Water> _water;
 	std::unique_ptr<LHScriptX::Script> _scriptx;
