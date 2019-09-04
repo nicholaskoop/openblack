@@ -114,7 +114,6 @@ Game::Game(int argc, char** argv):
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io    = ImGui::GetIO();
-	io.IniFilename = NULL;
 
 	ImGui::StyleColorsLight();
 
