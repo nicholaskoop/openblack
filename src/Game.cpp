@@ -47,6 +47,7 @@
 #include <Graphics/VertexBuffer.h>
 #include <LHScriptX/Script.h>
 #include <LHVMViewer.h>
+#include <MeshViewer.h>
 #include <glm/gtx/intersect.hpp>
 #include <iostream>
 #include <sstream>
@@ -130,6 +131,9 @@ Game::Game(int argc, char** argv):
 
 	// allocate vertex buffers for our debug draw
 	DebugDraw::Init();
+
+	_meshViewer = std::make_unique<MeshViewer>();
+	_meshViewer->Open();
 }
 
 Game::~Game()
@@ -333,6 +337,7 @@ void Game::guiLoop()
 		if (ImGui::BeginMenu("Tools"))
 		{
 			if (ImGui::MenuItem("Dump Land Textures")) { _landIsland->DumpTextures(); }
+			if (ImGui::MenuItem("Mesh Viewer")) { _meshViewer->Open(); }
 			ImGui::EndMenu();
 		}
 
@@ -344,20 +349,7 @@ void Game::guiLoop()
 		ImGui::EndMainMenuBar();
 	}
 
-	ImGui::Begin("Mesh Pack");
-
-	int i = 0;
-	for (const auto& tex : _meshPack->GetTextures())
-	{
-		ImGui::Image((ImTextureID)tex->GetNativeHandle(), ImVec2(128, 128));
-
-		if (++i % 4 != 0)
-			ImGui::SameLine();
-	}
-
-	ImGui::End();
-
-	//ImGui::ShowDemoWindow();
+	_meshViewer->DrawWindow();
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - 8.0f, io.DisplaySize.y - 8.0f), ImGuiCond_Always, ImVec2(1.0f, 1.0f));
