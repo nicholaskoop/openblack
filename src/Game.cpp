@@ -121,6 +121,13 @@ Game::Game(int argc, char** argv):
 	ImGuiStyle& style     = ImGui::GetStyle();
 	style.FrameBorderSize = 1.0f;
 
+	{
+		float scale = 1.0f;
+		args.Get<float>("scale", scale);
+		style.ScaleAllSizes(scale);
+		io.FontGlobalScale = scale;
+	}
+
 	ImGui_ImplSDL2_InitForOpenGL(_window->GetHandle(), _window->GetGLContext());
 	ImGui_ImplOpenGL3_Init("#version 130");
 
