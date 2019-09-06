@@ -76,7 +76,7 @@ Game* Game::sInstance = nullptr;
 
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
-	spdlog::debug("GL CALLBACK: {} type = {0:x}, severity = {0:x}, message = {}\n",
+	spdlog::debug("GL CALLBACK: {} type = {:x}, severity = {:x}, message = {}\n",
 	        (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
 	        type, severity, message);
 }
