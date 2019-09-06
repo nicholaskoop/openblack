@@ -270,11 +270,15 @@ void Game::Run()
 
 void Game::drawScene(const Camera& camera, bool drawWater)
 {
+	ShaderProgram* objectShader = _shaderManager->GetShader("SkinnedMesh");
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	_sky->Draw(camera);
+	objectShader->Bind();
+	objectShader->SetUniformValue("u_viewProjection", camera.GetViewProjectionMatrix());
+	_sky->Draw(*objectShader);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -312,11 +316,10 @@ void Game::drawScene(const Camera& camera, bool drawWater)
 
 	modelMatrix = glm::scale(modelMatrix, _modelScale);
 
-	ShaderProgram* objectShader = _shaderManager->GetShader("SkinnedMesh");
 	objectShader->Bind();
 	objectShader->SetUniformValue("u_viewProjection", camera.GetViewProjectionMatrix());
 	objectShader->SetUniformValue("u_modelTransform", modelMatrix);
-	_testModel->Draw(objectShader);
+	_testModel->Draw(*objectShader, 0);
 	_entityRegistry->DrawModels(camera, *_shaderManager);
 
 	glDisable(GL_CULL_FACE);
