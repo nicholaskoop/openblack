@@ -15,6 +15,7 @@
 #include "3D/Sky.h"
 #include "3D/Water.h"
 #include "Entities/Registry.h"
+#include "Game.h"
 #include "GameWindow.h"
 #include "Graphics/DebugLines.h"
 #include "Graphics/FrameBuffer.h"
@@ -186,6 +187,13 @@ void Renderer::DrawScene(const DrawSceneDesc& drawDesc) const
 	{
 		auto section = drawDesc.profiler.BeginScoped(Profiler::Stage::MainPass);
 		DrawPass(drawDesc);
+	}
+
+	// Draw some text
+	{
+		
+		// auto textShader = _shaderManager->GetShader("Text");
+		// textShader->SetTextureSampler()
 	}
 }
 

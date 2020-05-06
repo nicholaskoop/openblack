@@ -7,31 +7,4 @@
  * openblack is licensed under the GNU General Public License version 3.
  *****************************************************************************/
 
-#pragma once
-
-#include <array>
-#include <cstdint>
-
-namespace openblack::graphics
-{
-
-enum class RenderPass : uint8_t
-{
-	Main,
-	Reflection,
-	ImGui,
-	MeshViewer,
-	Gui,
-
-	_count
-};
-
-static constexpr std::array<std::string_view, static_cast<uint8_t>(RenderPass::_count)> RenderPassNames {
-    "Main Pass",
-    "Reflection Pass",
-    "ImGui Pass",
-    "Mesh Viewer Pass",
-	"GUI Pass",
-};
-
-} // namespace openblack::graphics
+#include "Hash.h"

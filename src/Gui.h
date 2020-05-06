@@ -26,6 +26,8 @@ namespace ImGui
 #define IMGUI_FLAGS_NONE UINT8_C(0x00)
 #define IMGUI_FLAGS_ALPHA_BLEND UINT8_C(0x01)
 
+inline
+
 // Helper function for passing bgfx::TextureHandle to ImGui::Image.
 inline void Image(bgfx::TextureHandle _handle, uint8_t _flags, uint8_t _mip, const ImVec2& _size,
                   const ImVec2& _uv0 = ImVec2(0.0f, 0.0f), const ImVec2& _uv1 = ImVec2(1.0f, 1.0f),
@@ -84,7 +86,10 @@ private:
 	bool CreateDeviceObjectsBgfx();
 	void RenderDrawDataBgfx(ImDrawData* drawData);
 
+	// void RenderText(graphics::RenderPass viewId, const graphics::ShaderProgram& program, const std::string& text, float x, float y);
+
 	void ShowProfilerWindow(Game& game);
+	void ShowFonts(Game& game);
 
 	static const char* StaticGetClipboardText(void* ud) { return reinterpret_cast<Gui*>(ud)->GetClipboardText(); }
 	static void StaticSetClipboardText(void* ud, const char* text) { reinterpret_cast<Gui*>(ud)->SetClipboardText(text); }

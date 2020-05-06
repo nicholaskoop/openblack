@@ -23,6 +23,7 @@ namespace openblack
 {
 class Camera;
 class FileSystem;
+class Font;
 class GameWindow;
 class Gui;
 class MeshPack;
@@ -31,6 +32,7 @@ class Profiler;
 class Renderer;
 class L3DMesh;
 class Sky;
+class TextRenderer;
 class Water;
 
 namespace lhscriptx
@@ -119,6 +121,7 @@ public:
 	[[nodiscard]] entities::Registry& GetEntityRegistry() const { return *_entityRegistry; }
 	[[nodiscard]] glm::mat4 GetModelMatrix() const;
 	Config& GetConfig() { return _config; }
+	const std::vector<std::unique_ptr<Font>>& GetFonts() const { return _fonts; }
 	[[nodiscard]] const Config& GetConfig() const { return _config; }
 	[[nodiscard]] const glm::ivec2& GetMousePosition() const { return _mousePosition; }
 
@@ -134,6 +137,7 @@ private:
 	std::unique_ptr<Gui> _gui;
 	std::unique_ptr<Camera> _camera;
 	std::unique_ptr<Profiler> _profiler;
+	std::unique_ptr<TextRenderer> _textRenderer;
 
 	std::unique_ptr<FileSystem> _fileSystem;
 	std::unique_ptr<LandIsland> _landIsland;
@@ -145,6 +149,8 @@ private:
 	std::unique_ptr<lhscriptx::Script> _scriptx;
 	std::unique_ptr<LHVM::LHVM> _lhvm;
 	std::unique_ptr<entities::Registry> _entityRegistry;
+
+	std::vector<std::unique_ptr<Font>> _fonts;
 
 	Config _config;
 

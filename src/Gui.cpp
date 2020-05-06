@@ -17,6 +17,7 @@
 #include "Entities/Components/Transform.h"
 #include "Entities/Components/Tree.h"
 #include "Entities/Registry.h"
+#include "Graphics/Font/Font.h"
 #include "Game.h"
 #include "GameWindow.h"
 #include "Graphics/Shaders/imgui/fs_imgui_image.bin.h"
@@ -608,6 +609,8 @@ bool Gui::Loop(Game& game)
 	if (config.waterDebug)
 		game.GetWater().DebugGUI();
 
+	ShowFonts(game);
+
 	ImGui::Render();
 
 	return false;
@@ -737,6 +740,99 @@ void Gui::Draw()
 	ImGui::SetCurrentContext(_imgui);
 
 	RenderDrawDataBgfx(ImGui::GetDrawData());
+}
+
+void Gui::ShowFonts(Game& game)
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	auto const& fonts = game.GetFonts();
+
+	ImGui::Begin("Fonts");
+
+	for (auto& font : fonts) {
+		auto const& glyphs = font->GetGlyphs();
+		bool font_details_opened = ImGui::TreeNode(font.get(), "Font \"%s\" %d px, %d glyphs", font->GetName().c_str(), font->GetSize(), glyphs.size());
+		if (font_details_opened) {
+			if (ImGui::TreeNode("Atlas Texture"))
+			{
+				auto const& texture = font->GetAtlasTexture();
+				ImGui::Image(texture.GetNativeHandle(), ImVec2(texture.GetWidth(), texture.GetHeight()));
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Glyphs", "Glyphs (%d)", glyphs.size()))
+			{
+				for (unsigned int base = 0; base <= IM_UNICODE_CODEPOINT_MAX; base += 256)
+				{
+					int count = 0;
+					for (unsigned int n = 0; n < 256; n++)
+						count += font->FindGlyphNoFallback(base + n) ? 1 : 0;
+
+					if (count > 0 && ImGui::TreeNode((void*)(intptr_t)base, "U+%04X..U+%04X (%d %s)", base, base + 255, count, count > 1 ? "glyphs" : "glyph"))
+					{
+						float cell_size = font->GetSize() * 1.0f;
+						float cell_spacing = style.ItemSpacing.y;
+						ImVec2 base_pos = ImGui::GetCursorScreenPos();
+						ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+						for (unsigned int n = 0; n < 256; n++)
+						{
+							ImVec2 cell_p1(base_pos.x + (n % 8) * (cell_size + cell_spacing), base_pos.y + (n / 8) * (cell_size + cell_spacing));
+							ImVec2 cell_p2(cell_p1.x + cell_size, cell_p1.y + cell_size);
+							const Font::Glyph* glyph = font->FindGlyphNoFallback(base + n);
+
+							draw_list->AddRect(cell_p1, cell_p2, glyph ? IM_COL32(255, 255, 255, 100) : IM_COL32(255, 255, 255, 50));
+							if (glyph) {
+								union
+								{
+									struct
+									{
+										bgfx::TextureHandle handle;
+										uint8_t flags;
+										uint8_t mip;
+									} s;
+									ImTextureID ptr;
+								} texture;
+								texture.s.handle = font->GetAtlasTexture().GetNativeHandle();
+								texture.s.flags = IMGUI_FLAGS_ALPHA_BLEND;
+								texture.s.mip = 0;
+
+								ImVec2 glyph_p1(base_pos.x + (n % 8) * (cell_size + cell_spacing), base_pos.y + (n / 8) * (cell_size + cell_spacing));
+								ImVec2 glyph_p2(cell_p1.x + glyph->width, cell_p1.y + font->GetSize());
+
+								draw_list->AddImage(texture.ptr, glyph_p1, glyph_p2, ImVec2(glyph->U0, glyph->V0), ImVec2(glyph->U1, glyph->V1));
+
+							}
+							if (glyph && ImGui::IsMouseHoveringRect(cell_p1, cell_p2))
+							{
+								ImGui::BeginTooltip();
+								ImGui::Text("Codepoint: U+%04X", base + n);
+								ImGui::Separator();
+								ImGui::Text("UV: (%.3f,%.3f)->(%.3f,%.3f)", glyph->U0, glyph->V0, glyph->U1, glyph->V1);
+								ImGui::Text("x_offset: %d width: %d", glyph->xOffset, glyph->width);
+								ImGui::Text("fXoffset: %.3f fWidth: %.3f unk2: %.3f", glyph->fXoffset, glyph->fWidth, glyph->unk2);
+								/*ImGui::Text("Visible: %d", glyph->Visible);
+								ImGui::Text("AdvanceX: %.1f", glyph->AdvanceX);
+								ImGui::Text("Pos: (%.2f,%.2f)->(%.2f,%.2f)", glyph->X0, glyph->Y0, glyph->X1, glyph->Y1);
+								ImGui::Text("UV: (%.3f,%.3f)->(%.3f,%.3f)", glyph->U0, glyph->V0, glyph->U1, glyph->V1);*/
+								ImGui::EndTooltip();
+							}
+						}
+
+						ImGui::Dummy(ImVec2((cell_size + cell_spacing) * 8, (cell_size + cell_spacing) * 32));
+						ImGui::TreePop();
+					}
+				}
+
+				ImGui::TreePop();
+			}
+
+			ImGui::TreePop();
+		}
+	}
+
+	ImGui::End();
 }
 
 void Gui::ShowProfilerWindow(Game& game)

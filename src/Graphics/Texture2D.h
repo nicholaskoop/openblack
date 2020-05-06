@@ -105,6 +105,8 @@ public:
 	void Create(uint16_t width, uint16_t height, uint16_t layers, Format format = Format::RGBA8,
 	            Wrapping wrapping = Wrapping::ClampEdge, const void* data = nullptr, size_t size = 0);
 
+	void Update(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t layer, const void* data, size_t size);
+
 	[[nodiscard]] const bgfx::TextureHandle& GetNativeHandle() const { return _handle; }
 	[[nodiscard]] uint16_t GetWidth() const { return _info.width; }
 	[[nodiscard]] uint16_t GetHeight() const { return _info.height; }

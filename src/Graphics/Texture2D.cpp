@@ -104,6 +104,13 @@ void Texture2D::Create(uint16_t width, uint16_t height, uint16_t layers, Format 
 	bgfx::frame();
 }
 
+void Texture2D::Update(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t layer, const void* data, size_t size)
+{
+	auto memory = bgfx::makeRef(data, size);
+	bgfx::updateTexture2D(_handle, layer, 0, x, y, width, height, memory);
+	bgfx::frame();
+}
+
 void Texture2D::DumpTexture()
 {
 	assert(!_name.empty());

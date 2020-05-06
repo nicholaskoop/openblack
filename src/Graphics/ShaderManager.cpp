@@ -14,12 +14,14 @@
 #include "Shaders/fs_line.bin.h"
 #include "Shaders/fs_object.bin.h"
 #include "Shaders/fs_terrain.bin.h"
+#include "Shaders/fs_text.bin.h"
 #include "Shaders/fs_water.bin.h"
 #include "Shaders/vs_line.bin.h"
 #include "Shaders/vs_line_instanced.bin.h"
 #include "Shaders/vs_object.bin.h"
 #include "Shaders/vs_object_instanced.bin.h"
 #include "Shaders/vs_terrain.bin.h"
+#include "Shaders/vs_text.bin.h"
 #include "Shaders/vs_water.bin.h"
 
 #include "3D/Camera.h"
@@ -35,7 +37,9 @@ const bgfx::EmbeddedShader s_embeddedShaders[] = {BGFX_EMBEDDED_SHADER(vs_line),
                                                   BGFX_EMBEDDED_SHADER(vs_object),  BGFX_EMBEDDED_SHADER(vs_object_instanced),
                                                   BGFX_EMBEDDED_SHADER(fs_object),
 
-                                                  BGFX_EMBEDDED_SHADER(vs_terrain), BGFX_EMBEDDED_SHADER(fs_terrain),
+												  BGFX_EMBEDDED_SHADER(vs_terrain), BGFX_EMBEDDED_SHADER(fs_terrain),
+
+												  BGFX_EMBEDDED_SHADER(vs_text),    BGFX_EMBEDDED_SHADER(fs_text),
 
                                                   BGFX_EMBEDDED_SHADER(vs_water),   BGFX_EMBEDDED_SHADER(fs_water),
 

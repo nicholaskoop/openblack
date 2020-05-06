@@ -9,29 +9,16 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
+#include <cstddef>
+#include <functional>
 
-namespace openblack::graphics
+namespace openblack
 {
-
-enum class RenderPass : uint8_t
+// https://www.boost.org/doc/libs/1_70_0/doc/html/hash/reference.html#boost.hash_combine
+template <class T>
+inline void hash_combine(std::size_t& seed, const T& v)
 {
-	Main,
-	Reflection,
-	ImGui,
-	MeshViewer,
-	Gui,
-
-	_count
-};
-
-static constexpr std::array<std::string_view, static_cast<uint8_t>(RenderPass::_count)> RenderPassNames {
-    "Main Pass",
-    "Reflection Pass",
-    "ImGui Pass",
-    "Mesh Viewer Pass",
-	"GUI Pass",
-};
-
-} // namespace openblack::graphics
+	std::hash<T> hasher;
+	seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+} // namespace openblack

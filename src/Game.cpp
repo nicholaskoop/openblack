@@ -17,9 +17,11 @@
 #include "3D/Water.h"
 #include "Common/FileSystem.h"
 #include "Entities/Registry.h"
+#include "Graphics/Font/Font.h"
 #include "GameWindow.h"
 #include "GitSHA1.h"
 #include "Gui.h"
+#include "Graphics/TextRenderer.h"
 #include "LHScriptX/Script.h"
 #include "MeshViewer.h"
 #include "Profiler.h"
@@ -70,6 +72,7 @@ Game::Game(Arguments&& args)
 	spdlog::debug("The GamePath is \"{}\".", _fileSystem->GetGamePath().generic_string());
 
 	_gui = Gui::create(_window.get(), graphics::RenderPass::ImGui, args.scale);
+	_textRenderer = std::make_unique<TextRenderer>(static_cast<bgfx::ViewId>(graphics::RenderPass::Gui));
 }
 
 Game::~Game()
@@ -80,7 +83,9 @@ Game::~Game()
 	_meshPack.reset();
 	_landIsland.reset();
 	_entityRegistry.reset();
+	_fonts.clear();
 	_gui.reset();
+	_textRenderer.reset();
 	_renderer.reset();
 	_window.reset();
 	SDL_Quit(); // todo: move to GameWindow
@@ -254,6 +259,17 @@ void Game::Run()
 	_sky = std::make_unique<Sky>();
 	_water = std::make_unique<Water>();
 
+	constexpr std::array<std::string_view, 3> FontFiles = {
+	"./Data/j0", "./Data/f1", "./Data/f3"
+	};
+
+	for (auto& filename : FontFiles)
+	{
+		auto font = std::make_unique<Font>();
+		font->LoadFromFile(*_fileSystem, std::string(filename));
+		_fonts.push_back(std::move(font));
+	}
+
 	LoadVariables();
 	LoadMap("./Scripts/Land1.txt");
 
@@ -307,6 +323,13 @@ void Game::Run()
 		{
 			auto section = _profiler->BeginScoped(Profiler::Stage::GuiDraw);
 			_gui->Draw();
+		}
+
+		{
+			//auto section = _profiler->BeginScoped(Profiler::Stage::GuiDraw);
+#undef DrawText
+			_textRenderer->DrawText(*_fonts[2], "Yeah, Silver ones ain't");
+			_textRenderer->Draw();
 		}
 
 		{
